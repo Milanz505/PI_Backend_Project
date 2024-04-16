@@ -19,7 +19,7 @@ public class User {
     private String nome;
     private String email;
     private String senha;
-
+    
     public UUID getId() {
         return id;
     }
