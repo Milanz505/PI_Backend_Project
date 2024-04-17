@@ -19,7 +19,8 @@ public class User {
     private String nome;
     private String email;
     private String senha;
-    
+    private String confirmarSenha;
+
     public UUID getId() {
         return id;
     }
@@ -50,5 +51,13 @@ public class User {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getConfirmarSenha() {
+        return confirmarSenha;
+    }
+
+    public void setConfirmarSenha(String confirmarSenha) {
+        this.confirmarSenha = confirmarSenha;
     }
 }

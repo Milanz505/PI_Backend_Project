@@ -29,8 +29,8 @@ public class UserService {
         } else if(!isValidEmail(obj.getEmail())) {
             message.setMessage("O endereço de email é inválido !!!");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-        } else if(!isValidPassword(obj.getSenha())) {
-            message.setMessage("A senha não atende aos requisitos mínimos !!!");
+        } else if(!isValidPassword(obj.getSenha()) || !isConfirmPasswordValid(obj.getSenha(), obj.getConfirmarSenha())) {
+            message.setMessage("A senha não atende aos requisitos mínimos ou as senhas não conferem !!!");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(action.save(obj), HttpStatus.CREATED);
@@ -53,5 +53,10 @@ public class UserService {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
+    }
+
+    // Método para verificar se a senha de confirmação é igual à senha
+    private boolean isConfirmPasswordValid(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
     }
 }
