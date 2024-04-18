@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+
 import br.com.projeto.carsoncars.Entities.User.User;
 
 @Repository
@@ -18,4 +19,6 @@ public interface Repositorio extends CrudRepository<User, UUID> {
     List<User> findByNomeContaining(String term);
     List<User> findByNomeStartsWith(String term);
     List<User> findByNomeEndsWith(String term);
+
+
 }

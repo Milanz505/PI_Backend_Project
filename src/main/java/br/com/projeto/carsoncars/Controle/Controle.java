@@ -20,6 +20,7 @@ import br.com.projeto.carsoncars.Repository.Repositorio;
 import br.com.projeto.carsoncars.Services.AuthService;
 import br.com.projeto.carsoncars.Services.UserService;
 
+
 @RestController
 public class Controle {
 
@@ -31,6 +32,8 @@ public class Controle {
 
     @Autowired
     private UserService UserService;
+
+    //USER 
 
     @PostMapping("/User")
     public ResponseEntity<?> Cadastrar(@RequestBody User obj){
@@ -84,6 +87,8 @@ public class Controle {
         return action.findByNomeEndsWith("null");
     }
 
+    // AUTH
+
     @PostMapping("/auth")
     public ResponseEntity<?> authenticate(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
@@ -91,12 +96,23 @@ public class Controle {
         return authService.authenticate(email, senha);
     }
 
+    // ANUNCIO
 
+
+
+@GetMapping("/anuncio/count")
+public long getAnuncioCount() {
+    return action.count();
+}
+
+
+    // LOCALHOST
 
     @GetMapping("")
     public String mensagem(){
         return "oiiiii :3";
     }
+
     @PostMapping("/carsoncars")
     public User user(@RequestBody User u){
         return u;
