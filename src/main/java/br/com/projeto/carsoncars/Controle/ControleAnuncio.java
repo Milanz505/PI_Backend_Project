@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ControleAnuncio {
 
