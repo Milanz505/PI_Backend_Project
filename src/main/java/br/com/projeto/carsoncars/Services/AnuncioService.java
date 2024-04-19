@@ -110,13 +110,13 @@ public class AnuncioService {
             return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
         }
 
-        Anuncio anuncio = optionalAnuncio.get(); // Extract the Anuncio object from Optional
+        Anuncio anuncio = optionalAnuncio.get(); // Extrair anuncio do optional
 
         if (!anuncio.getUser().getEmail().equals(email)) {
             return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
 
-        action.delete(anuncio); // Pass the Anuncio object to delete method
+        action.delete(anuncio); // Passar o anuncio para o delete
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Anuncio deleted successfully");

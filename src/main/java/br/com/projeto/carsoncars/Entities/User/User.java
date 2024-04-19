@@ -21,6 +21,8 @@ public class User {
     private String senha;
     private String confirmarSenha;
 
+    // Getters and setters
+
     public UUID getId() {
         return id;
     }

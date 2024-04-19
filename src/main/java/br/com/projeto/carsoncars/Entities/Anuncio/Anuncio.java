@@ -42,10 +42,10 @@ public class Anuncio {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
     private User user;
 
-    // Getters and setters for the fields
+    // Getters and setters
 
     public UUID getId() {
         return id;

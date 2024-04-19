@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 
 @Repository
-public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> {
+public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> { // Tratamento de posts feito por ID
 
     List<Anuncio> findByUserEmail(String email);
 
-    Optional<Anuncio> findById(UUID id); // Change method name to findById
+    Optional<Anuncio> findById(UUID id); 
 
     void deleteById(UUID id);
 }
