@@ -1,7 +1,6 @@
 package br.com.projeto.carsoncars.Controle;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -92,11 +91,12 @@ public class Controle {
     // AUTH
 
     @PostMapping("/auth")
-    public ResponseEntity<?> authenticate(@RequestBody Map<String, String> credentials) {
-        String email = credentials.get("email");
-        String senha = credentials.get("senha");
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String senha = loginRequest.getSenha();
         return authService.authenticate(email, senha);
     }
+    
 
     // ANUNCIO
 
