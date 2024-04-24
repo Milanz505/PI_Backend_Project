@@ -38,7 +38,7 @@ public class Anuncio {
     private Year ano;
 
     @Column(name = "preco", nullable = false)
-    private int preco;
+    private float preco;
 
     @Column(name = "descricao", nullable = false, length = 300)
     private String descricao;
@@ -100,11 +100,11 @@ public class Anuncio {
         this.ano = ano;
     }
 
-    public int getPreco() {
+    public float getPreco() {
         return preco;
     }
 
-    public void setPreco(int preco) {
+    public void setPreco(float preco) {
         this.preco = preco;
     }
 

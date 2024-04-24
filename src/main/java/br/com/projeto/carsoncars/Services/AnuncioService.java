@@ -22,7 +22,7 @@ public class AnuncioService {
     private AnuncioRepository action;
 
     public ResponseEntity<?> createAnuncio(String marca, String modelo, String nomeDoAutomovel, String tempoDeUso,
-                                           Year ano, int preco, String descricao, String email, MultipartFile file) {
+                                           Year ano, float preco, String descricao, String email, MultipartFile file) {
 
         User user = (User) action.findByUserEmail(email);
 
