@@ -88,8 +88,8 @@ public class Anuncio {
         return tempoDeUso;
     }
 
-    public void setTempoDeUso(String tempoDeUso) {
-        this.tempoDeUso = tempoDeUso;
+    public void setTempoDeUso(String tempoDeUso2) {
+        this.tempoDeUso = tempoDeUso2;
     }
 
     public Year getAno() {
@@ -131,4 +131,6 @@ public class Anuncio {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 }
