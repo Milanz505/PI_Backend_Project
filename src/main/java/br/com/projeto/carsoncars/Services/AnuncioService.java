@@ -59,7 +59,73 @@ public class AnuncioService {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+<<<<<<< HEAD
     // Existing methods
+=======
+    public ResponseEntity<List<Anuncio>> readAnuncios() {
+        List<Anuncio> anuncios = (List<Anuncio>) action.findAll();
+        return new ResponseEntity<>(anuncios, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> updateAnuncio(UUID id, String modeloCarro, int ano, int preco, String descricao,
+            String email) {
+        Optional<Anuncio> optionalAnuncio = action.findById(id);
+
+        if (optionalAnuncio.isEmpty()) {
+            return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
+        }
+
+        Anuncio anuncio = optionalAnuncio.get();
+
+        if (!anuncio.getUser().getEmail().equals(email)) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (modeloCarro != null) {
+            anuncio.setModeloCarro(modeloCarro);
+        }
+
+        if (ano != 0) {
+            anuncio.setAno(Year.of(ano));
+        }
+
+        if (preco != -1) {
+            anuncio.setPreco(preco);
+        }
+
+        if (descricao != null) {
+            anuncio.setDescricao(descricao);
+        }
+
+        action.save(anuncio);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Anuncio updated successfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteAnuncio(UUID id, String email) {
+        Optional<Anuncio> optionalAnuncio = action.findById(id);
+
+        if (optionalAnuncio.isEmpty()) {
+            return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
+        }
+
+        Anuncio anuncio = optionalAnuncio.get(); // Extrair anuncio do optional
+
+        if (!anuncio.getUser().getEmail().equals(email)) {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        action.delete(anuncio); // Passar o anuncio para o delete
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Anuncio deleted successfully");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+>>>>>>> fa5256300859110311d0ce15f1aedc84856477f7
 
     private String saveImage(MultipartFile file) {
         try {
