@@ -12,6 +12,7 @@ import br.com.projeto.carsoncars.Entities.Messages.Message;
 import br.com.projeto.carsoncars.Entities.User.User;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 
+
 @Service
 public class UserService {
     

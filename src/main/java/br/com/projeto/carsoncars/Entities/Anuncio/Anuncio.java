@@ -1,33 +1,38 @@
 package br.com.projeto.carsoncars.Entities.Anuncio;
 
-import java.time.Year;
-import java.util.UUID;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.time.Year; import java.util.UUID;
 
-import br.com.projeto.carsoncars.Entities.User.User;
+import br.com.projeto.carsoncars.Entities.User.User; 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue; 
+import jakarta.persistence.GenerationType; 
+import jakarta.persistence.Id; 
+import jakarta.persistence.JoinColumn; 
+import jakarta.persistence.ManyToOne; 
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "anuncio") 
-@EntityListeners(AuditingEntityListener.class)
+@Table(name = "anuncio")
 public class Anuncio {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) 
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_anuncio")
     private UUID id;
 
-    @Column(name = "modelo_carro", nullable = false)
-    private String modeloCarro;
+    @Column(name = "marca", nullable = false)
+    private String marca;
+
+    @Column(name = "modelo", nullable = false)
+    private String modelo;
+
+    @Column(name = "nome_do_automovel", nullable = false)
+    private String nomeDoAutomovel;
+
+    @Column(name = "tempo_de_uso", nullable = false)
+    private String tempoDeUso;
 
     @Column(name = "ano", nullable = false)
     private Year ano;
@@ -45,7 +50,8 @@ public class Anuncio {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Getters and setters for the fields
+    // Getters and setters
+
 
     public UUID getId() {
         return id;
@@ -55,12 +61,36 @@ public class Anuncio {
         this.id = id;
     }
 
-    public String getModeloCarro() {
-        return modeloCarro;
+    public String getMarca() {
+        return marca;
     }
 
-    public void setModeloCarro(String modeloCarro) {
-        this.modeloCarro = modeloCarro;
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getNomeDoAutomovel() {
+        return nomeDoAutomovel;
+    }
+
+    public void setNomeDoAutomovel(String nomeDoAutomovel) {
+        this.nomeDoAutomovel = nomeDoAutomovel;
+    }
+
+    public String getTempoDeUso() {
+        return tempoDeUso;
+    }
+
+    public void setTempoDeUso(String tempoDeUso) {
+        this.tempoDeUso = tempoDeUso;
     }
 
     public Year getAno() {
@@ -103,5 +133,3 @@ public class Anuncio {
         this.user = user;
     }
 }
-
-
