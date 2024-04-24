@@ -40,9 +40,11 @@ public class AuthService {
                .signWith(key)
                .compact();
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-
+        response.put("user", user); // Adicione o usuário ao mapa
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    
 }
