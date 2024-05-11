@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import br.com.projeto.carsoncars.Services.AuthService;
 import br.com.projeto.carsoncars.Services.UserService;
 
 
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class Controle {
@@ -33,6 +35,7 @@ public class Controle {
 
     @Autowired
     private UserService UserService;
+
 
     //USER 
 
