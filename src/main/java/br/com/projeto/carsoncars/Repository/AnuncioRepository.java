@@ -15,4 +15,6 @@ public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> { // Tr
     Optional<Anuncio> findById(UUID id); 
 
     void deleteById(UUID id);
+
+    List<Anuncio> findByUserId(UUID id);
 }

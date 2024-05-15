@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Entities.User.User;
+import br.com.projeto.carsoncars.Repository.AnuncioRepository;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 import br.com.projeto.carsoncars.Services.AuthService;
 import br.com.projeto.carsoncars.Services.UserService;
@@ -36,6 +38,8 @@ public class Controle {
     @Autowired
     private UserService UserService;
 
+    @Autowired
+    private AnuncioRepository anuncioRepository;
 
     //USER 
 
@@ -59,12 +63,16 @@ public class Controle {
         return action.findByEmail(email);
     }
 
-    @DeleteMapping("/User/delete/{id}")
-    public void remove(@PathVariable UUID id){
-        User obj = getById(id);
-        action.delete(obj);
-
+@DeleteMapping("/User/delete/{id}")
+public void remove(@PathVariable UUID id){
+    User user = getById(id);
+    List<Anuncio> anuncios = anuncioRepository.findByUserId(id);
+    for (Anuncio anuncio : anuncios) {
+        anuncioRepository.delete(anuncio);
     }
+    action.delete(user);
+}
+
 
     @PutMapping("/User")
     public User edit(@RequestBody User obj){

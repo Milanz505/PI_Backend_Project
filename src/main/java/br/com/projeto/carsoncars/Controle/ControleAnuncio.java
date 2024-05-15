@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ControleAnuncio {
@@ -34,6 +36,12 @@ public class ControleAnuncio {
     public List<Anuncio> getAnunciosByUserEmail(@PathVariable String email) {
         return anuncioRepository.findByUserEmail(email);
     }
+
+    @GetMapping("/anuncio/id-user/{id}")
+    public List<Anuncio> getAnunciosByUserId(@PathVariable UUID id) {
+        return anuncioRepository.findByUserId(id);
+    }
+    
 
     @DeleteMapping("/anuncio/delete/{id}")
     public void deleteAnuncio(@PathVariable UUID id) {
