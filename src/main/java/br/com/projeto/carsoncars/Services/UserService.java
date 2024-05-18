@@ -19,13 +19,15 @@ import br.com.projeto.carsoncars.Repository.Repositorio;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("deprecation")
 @Service
 public class UserService {
-    private SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    
+    // Chave secreta JWT definida manualmente (substitua esta chave pela sua própria)
+    private static final String SECRET_KEY = "r1TCaDCyS+mT+eQgYHhiLVhO/VgApif3xdKpD7NWbjWfP0q9CGY7Xo78t/gfyUxjbfXhCnvNvwUHwBhREkFpGg==";
+
+
     @Autowired
     private Message message;
 
@@ -54,9 +56,9 @@ public class UserService {
 
             // Construa o token
             String jws = Jwts.builder()
-                .setSubject(savedUser.getId().toString())  // Defina o assunto do token (geralmente, o nome de usuário ou ID do usuário)
-                .signWith(key)  // Assine o token com a chave privada
-                .compact();  // Construa o token
+                    .setSubject(savedUser.getId().toString())
+                    .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .compact(); 
 
             // Crie um mapa para a resposta
             Map<String, Object> response = new HashMap<>();
@@ -65,8 +67,6 @@ public class UserService {
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
-    
-    
     }
 
     // Método para verificar se o e-mail é válido

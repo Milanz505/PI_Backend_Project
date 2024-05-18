@@ -1,6 +1,5 @@
 package br.com.projeto.carsoncars.Services;
 
-import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,42 +12,42 @@ import org.springframework.stereotype.Service;
 import br.com.projeto.carsoncars.Entities.User.User;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-@SuppressWarnings("deprecation")
 @Service
 public class AuthService {
+    // Chave secreta JWT definida manualmente
+    private static final String SECRET_KEY = "r1TCaDCyS+mT+eQgYHhiLVhO/VgApif3xdKpD7NWbjWfP0q9CGY7Xo78t/gfyUxjbfXhCnvNvwUHwBhREkFpGg==";
+
     @Autowired
     private PasswordEncoder passwordEncoder; // Injeta o encoder de senha
-    
+
     @Autowired
     private Repositorio action;
 
     public ResponseEntity<?> authenticate(String email, String senha) {
-
         User user = action.findByEmail(email);
 
-        if (user == null || !user.getSenha().equals(senha)) {
-            return new ResponseEntity<>("Email ou senha invalidos", HttpStatus.UNAUTHORIZED);
+        if (user == null || !passwordEncoder.matches(senha, user.getSenha())) {
+            return new ResponseEntity<>("Email ou senha inválidos", HttpStatus.UNAUTHORIZED);
         }
 
-        // Criação de uma chave segura para HS512
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
+        // Construir o token JWT usando a chave secreta definida manualmente
+        @SuppressWarnings("deprecation")
         String token = Jwts.builder()
-               .setSubject(user.getId().toString())
-               .signWith(key)
-               .compact();
+                .setSubject(user.getId().toString())
+                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .compact();
 
+        // Atualizar a senha encriptada do usuário
         user.setSenha(passwordEncoder.encode(user.getSenha()));
         user.setConfirmarSenha(passwordEncoder.encode(user.getConfirmarSenha()));
-        
+
+        // Criar um mapa para a resposta
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
-        response.put("user", user); // Adicione o usuário ao mapa
+        response.put("user", user); // Adicionar o usuário ao mapa
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    
 }
