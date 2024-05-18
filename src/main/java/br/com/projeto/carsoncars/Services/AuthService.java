@@ -1,7 +1,6 @@
 package br.com.projeto.carsoncars.Services;
 
 import java.security.Key;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,15 +30,14 @@ public class AuthService {
         User user = action.findByEmail(email);
 
         if (user == null || !user.getSenha().equals(senha)) {
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Email ou senha invalidos", HttpStatus.UNAUTHORIZED);
         }
 
         // Criação de uma chave segura para HS512
         Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
         String token = Jwts.builder()
-               .setSubject(user.getEmail())
-               .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+               .setSubject(user.getId().toString())
                .signWith(key)
                .compact();
 

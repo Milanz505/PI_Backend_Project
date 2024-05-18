@@ -54,7 +54,7 @@ public class UserService {
 
             // Construa o token
             String jws = Jwts.builder()
-                .setSubject(savedUser.getEmail())  // Defina o assunto do token (geralmente, o nome de usuário ou ID do usuário)
+                .setSubject(savedUser.getId().toString())  // Defina o assunto do token (geralmente, o nome de usuário ou ID do usuário)
                 .signWith(key)  // Assine o token com a chave privada
                 .compact();  // Construa o token
 
