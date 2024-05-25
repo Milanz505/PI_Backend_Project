@@ -20,8 +20,11 @@ public class User {
     private String email;
     private String senha;
     private String confirmarSenha;
-
+    private boolean admState;
     // Getters and setters
+    public boolean getAdmState() {
+        return admState;
+    }   
 
     public UUID getId() {
         return id;
@@ -61,5 +64,9 @@ public class User {
 
     public void setConfirmarSenha(String confirmarSenha) {
         this.confirmarSenha = confirmarSenha;
+    }
+
+    public void setAdmState(boolean admState) {
+        this.admState = admState;
     }
 }

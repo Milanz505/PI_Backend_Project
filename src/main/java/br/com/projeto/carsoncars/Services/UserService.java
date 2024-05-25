@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.crypto.SecretKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,7 @@ import br.com.projeto.carsoncars.Repository.Repositorio;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 
 @SuppressWarnings("deprecation")
 @Service
@@ -54,11 +53,13 @@ public class UserService {
             obj.setConfirmarSenha(passwordEncoder.encode(obj.getConfirmarSenha()));
             User savedUser = action.save(obj);
 
-            // Construa o token
+            long expirationTime = 60 * 60 * 1000; // 1 hora em milissegundos
+
             String jws = Jwts.builder()
-                    .setSubject(savedUser.getId().toString())
-                    .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                    .compact(); 
+               .setSubject(savedUser.getId().toString())
+               .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // Defina o tempo de expiração
+               .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+               .compact(); 
 
             // Crie um mapa para a resposta
             Map<String, Object> response = new HashMap<>();
