@@ -6,9 +6,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -23,8 +25,8 @@ public class ControleAnuncio {
     }
 
     @GetMapping("/anuncio")
-    public List<Anuncio> getAllAnuncios() {
-        return (List<Anuncio>) anuncioRepository.findAll();
+    public Page<Anuncio> getAllAnuncios(Pageable pageable){
+        return anuncioRepository.findAll(pageable);
     }
 
     @GetMapping("/anuncio/{id}")

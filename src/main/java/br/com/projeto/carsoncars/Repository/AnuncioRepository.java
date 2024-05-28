@@ -7,6 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Repository
 public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> { // Tratamento de posts feito por ID
 
@@ -17,4 +20,6 @@ public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> { // Tr
     void deleteById(UUID id);
 
     List<Anuncio> findByUserId(UUID id);
+
+    Page<Anuncio> findAll(Pageable pageable);
 }
