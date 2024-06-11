@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
+import br.com.projeto.carsoncars.Entities.ChatMessages.ChatMessages;
 import br.com.projeto.carsoncars.Entities.User.User;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 import br.com.projeto.carsoncars.Services.AuthService;
 import br.com.projeto.carsoncars.Services.UserService;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 
 
 @RestController
@@ -45,6 +48,12 @@ public class Controle {
 
     @Autowired
     private AnuncioRepository anuncioRepository;
+
+    @MessageMapping("/chatMessage")
+    @SendTo("/canal")
+    public ChatMessages sendMessage(ChatMessages message){
+        return message;
+    }
 
     //USER 
 
@@ -69,15 +78,15 @@ public class Controle {
         return action.findByEmail(email);
     }
 
-@DeleteMapping("/User/delete/{id}")
-public void remove(@PathVariable UUID id){
-    User user = getById(id);
-    List<Anuncio> anuncios = anuncioRepository.findByUserId(id);
-    for (Anuncio anuncio : anuncios) {
-        anuncioRepository.delete(anuncio);
+    @DeleteMapping("/User/delete/{id}")
+    public void remove(@PathVariable UUID id){
+        User user = getById(id);
+        List<Anuncio> anuncios = anuncioRepository.findByUserId(id);
+        for (Anuncio anuncio : anuncios) {
+            anuncioRepository.delete(anuncio);
+        }
+        action.delete(user);
     }
-    action.delete(user);
-}
 
 
     @PutMapping("/User")
@@ -121,18 +130,14 @@ public void remove(@PathVariable UUID id){
 
 
 
-@GetMapping("/anuncio/count")
-public long getAnuncioCount() {
-    return action.count();
-}
+    @GetMapping("/anuncio/count")
+    public long getAnuncioCount() {
+        return action.count();
+    }
 
 
     // LOCALHOST
 
-    @GetMapping("")
-    public String mensagem(){
-        return "oiiiii :3";
-    }
 
     @PostMapping("/carsoncars")
     public User user(@RequestBody User u){
