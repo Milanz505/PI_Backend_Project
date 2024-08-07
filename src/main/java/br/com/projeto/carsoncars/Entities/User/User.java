@@ -21,6 +21,8 @@ public class User {
     private String senha;
     private String confirmarSenha;
     private boolean admState;
+    private String fotoDePerfil;
+
     // Getters and setters
     public boolean getAdmState() {
         return admState;
@@ -68,5 +70,13 @@ public class User {
 
     public void setAdmState(boolean admState) {
         this.admState = admState;
+    }
+
+    public String getfotoDePerfil() {
+        return fotoDePerfil;
+    }
+
+    public void setfotoDePerfil(String fotoDePefil) {
+        this.fotoDePerfil = fotoDePefil;
     }
 }

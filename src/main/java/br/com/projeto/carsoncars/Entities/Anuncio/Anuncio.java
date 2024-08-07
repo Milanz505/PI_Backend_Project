@@ -44,7 +44,7 @@ public class Anuncio {
     private String descricao;
 
     @Column(name = "imagem_url")
-    private String imageUrl;
+    private String[] imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
@@ -116,11 +116,11 @@ public class Anuncio {
         this.descricao = descricao;
     }
 
-    public String getImageUrl() {
+    public String[] getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(String[] imageUrl) {
         this.imageUrl = imageUrl;
     }
 

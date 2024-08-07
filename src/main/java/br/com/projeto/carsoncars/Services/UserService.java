@@ -51,6 +51,7 @@ public class UserService {
             // Encripta a senha antes de salvar
             obj.setSenha(passwordEncoder.encode(obj.getSenha()));
             obj.setConfirmarSenha(passwordEncoder.encode(obj.getConfirmarSenha()));
+            
             User savedUser = action.save(obj);
 
             long expirationTime = 60 * 60 * 1000; // 1 hora em milissegundos

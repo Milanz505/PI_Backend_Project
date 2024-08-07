@@ -1,7 +1,5 @@
 package br.com.projeto.carsoncars.Services;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Entities.User.User;
@@ -22,7 +19,7 @@ public class AnuncioService {
     private AnuncioRepository action;
 
     public ResponseEntity<?> createAnuncio(String marca, String modelo, String nomeDoAutomovel, String tempoDeUso,
-                                           Year ano, float preco, String descricao, String email, MultipartFile file) {
+                                           Year ano, float preco, String descricao, String email, String[] imageUrl) {
 
         User user = (User) action.findByUserEmail(email);
 
@@ -34,7 +31,7 @@ public class AnuncioService {
             return new ResponseEntity<>("Invalid fields", HttpStatus.BAD_REQUEST);
         }
 
-        String imageUrl = saveImage(file);
+        
 
         if (imageUrl == null) {
             return new ResponseEntity<>("Error saving image", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,20 +56,4 @@ public class AnuncioService {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    private String saveImage(MultipartFile file) {
-        try {
-            String fileName = file.getOriginalFilename();
-            File destinationFile = new File("caminho/para/salvar/imagem/" + fileName);
-            file.transferTo(destinationFile);
-            return "caminho/para/salvar/imagem/" + fileName; // Retorna a URL da imagem
-        } catch (IOException e) {
-            e.printStackTrace();
-            // add depois Lógica para lidar com erros ao salvar a imagem
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            // add depois Lógica para lidar com outros erros ao salvar a imagem
-            return null;
-        }
-    }
 }
