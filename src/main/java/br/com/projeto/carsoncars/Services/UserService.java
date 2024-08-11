@@ -2,6 +2,7 @@ package br.com.projeto.carsoncars.Services;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.projeto.carsoncars.Entities.Messages.Message;
 import br.com.projeto.carsoncars.Entities.User.User;
+import br.com.projeto.carsoncars.Entities.User.UserUpdateDTO;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 
 import io.jsonwebtoken.Jwts;
@@ -51,6 +53,7 @@ public class UserService {
             // Encripta a senha antes de salvar
             obj.setSenha(passwordEncoder.encode(obj.getSenha()));
             obj.setConfirmarSenha(passwordEncoder.encode(obj.getConfirmarSenha()));
+            
             User savedUser = action.save(obj);
 
             long expirationTime = 60 * 60 * 1000; // 1 hora em milissegundos
@@ -68,7 +71,33 @@ public class UserService {
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
+
+        
     }
+
+    public User updateUser(UUID id, UserUpdateDTO userUpdateDTO) {
+        User user = action.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        if (userUpdateDTO.getNome() != null) {
+            user.setNome(userUpdateDTO.getNome());
+        }
+        if (userUpdateDTO.getEmail() != null) {
+            user.setEmail(userUpdateDTO.getEmail());
+        }
+        if (userUpdateDTO.getSenha() != null) {
+            user.setSenha(passwordEncoder.encode(userUpdateDTO.getSenha()));
+        }
+        if (userUpdateDTO.getConfirmarSenha() != null) {
+            user.setConfirmarSenha(passwordEncoder.encode(userUpdateDTO.getConfirmarSenha()));
+        }
+        if (userUpdateDTO.getFotoDePerfil() != null) {
+            user.setfotoDePerfil(userUpdateDTO.getFotoDePerfil());
+        }
+        return action.save(user);
+    }
+
 
     // Método para verificar se o e-mail é válido
     private boolean isValidEmail(String email) {

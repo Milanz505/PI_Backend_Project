@@ -1,13 +1,20 @@
 package br.com.projeto.carsoncars.Entities.User;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 
 @Entity
 @Table(name = "User")
@@ -21,6 +28,14 @@ public class User {
     private String senha;
     private String confirmarSenha;
     private boolean admState;
+    private String fotoDePerfil;
+
+    
+    @ManyToMany(mappedBy = "likedByUsers")
+    @JsonBackReference
+    private Set<Anuncio> likedAnuncios = new HashSet<>();
+
+
     // Getters and setters
     public boolean getAdmState() {
         return admState;
@@ -68,5 +83,21 @@ public class User {
 
     public void setAdmState(boolean admState) {
         this.admState = admState;
+    }
+
+    public String getfotoDePerfil() {
+        return fotoDePerfil;
+    }
+
+    public void setfotoDePerfil(String fotoDePefil) {
+        this.fotoDePerfil = fotoDePefil;
+    }
+
+    public Set<Anuncio> getLikedAnuncios() {
+        return likedAnuncios;
+    }
+
+    public void setLikedAnuncios(Set<Anuncio> likedAnuncios) {
+        this.likedAnuncios = likedAnuncios;
     }
 }

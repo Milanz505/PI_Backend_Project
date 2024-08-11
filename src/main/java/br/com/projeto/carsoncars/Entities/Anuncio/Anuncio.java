@@ -1,7 +1,10 @@
 package br.com.projeto.carsoncars.Entities.Anuncio;
 
 
-import java.time.Year; import java.util.UUID;
+import java.time.Year;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import br.com.projeto.carsoncars.Entities.User.User; 
 import jakarta.persistence.Column;
@@ -9,9 +12,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue; 
 import jakarta.persistence.GenerationType; 
 import jakarta.persistence.Id; 
-import jakarta.persistence.JoinColumn; 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne; 
 import jakarta.persistence.Table;
+
+
+
 
 @Entity
 @Table(name = "anuncio")
@@ -44,11 +52,26 @@ public class Anuncio {
     private String descricao;
 
     @Column(name = "imagem_url")
-    private String imageUrl;
+    private String[] imageUrl;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
     private User user;
+
+    @ManyToMany
+    @JoinTable(
+        name = "anuncio_likes",
+        joinColumns = @JoinColumn(name = "anuncio_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+        
+    )
+    private Set<User> likedByUsers = new HashSet<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
+
 
     // Getters and setters
 
@@ -116,11 +139,11 @@ public class Anuncio {
         this.descricao = descricao;
     }
 
-    public String getImageUrl() {
+    public String[] getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(String[] imageUrl) {
         this.imageUrl = imageUrl;
     }
 
@@ -132,5 +155,12 @@ public class Anuncio {
         this.user = user;
     }
 
+    public Set<User> getLikedByUsers() {
+        return likedByUsers;
+    }
+
+    public void setLikedByUsers(Set<User> likedByUsers) {
+        this.likedByUsers = likedByUsers;
+    }
 
 }

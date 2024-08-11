@@ -8,13 +8,18 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.http.ResponseEntity;
+import br.com.projeto.carsoncars.Services.AnuncioService;
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ControleAnuncio {
+
+
+    @Autowired
+    private AnuncioService anuncioService;
 
     @Autowired
     private AnuncioRepository anuncioRepository;
@@ -54,4 +59,15 @@ public class ControleAnuncio {
     public Anuncio updateAnuncio(@RequestBody Anuncio anuncio) {
         return anuncioRepository.save(anuncio);
     }
+
+    @PostMapping("/anuncio/{anuncioId}/like/{userId}")
+    public ResponseEntity<?> likeAnuncio(@PathVariable UUID anuncioId, @PathVariable UUID userId) {
+        return anuncioService.addLike(anuncioId, userId);
+    }
+
+    @PostMapping("/anuncio/{anuncioId}/unlike/{userId}")
+    public ResponseEntity<?> unlikeAnuncio(@PathVariable UUID anuncioId, @PathVariable UUID userId) {
+        return anuncioService.removeLike(anuncioId, userId);
+    }
+
 }

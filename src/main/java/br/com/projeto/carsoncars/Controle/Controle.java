@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +21,16 @@ import br.com.projeto.carsoncars.Repository.AnuncioRepository;
 import br.com.projeto.carsoncars.Repository.Repositorio;
 import br.com.projeto.carsoncars.Services.AuthService;
 import br.com.projeto.carsoncars.Services.UserService;
+import br.com.projeto.carsoncars.Entities.User.UserUpdateDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class Controle {
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; // Injeta o encoder de senha    
 
     @Autowired
     private AuthService authService;
@@ -45,6 +43,7 @@ public class Controle {
 
     @Autowired
     private AnuncioRepository anuncioRepository;
+
 
     //USER 
 
@@ -69,8 +68,8 @@ public class Controle {
         return action.findByEmail(email);
     }
 
-@DeleteMapping("/User/delete/{id}")
-public void remove(@PathVariable UUID id){
+    @DeleteMapping("/User/delete/{id}")
+    public void remove(@PathVariable UUID id){
     User user = getById(id);
     List<Anuncio> anuncios = anuncioRepository.findByUserId(id);
     for (Anuncio anuncio : anuncios) {
@@ -80,12 +79,11 @@ public void remove(@PathVariable UUID id){
 }
 
 
-    @PutMapping("/User")
-    public User edit(@RequestBody User obj){
-        obj.setSenha(passwordEncoder.encode(obj.getSenha()));
-        obj.setConfirmarSenha(passwordEncoder.encode(obj.getConfirmarSenha()));
-        return action.save(obj);
+    @PutMapping("/User/{id}")
+    public User update(@PathVariable UUID id, @RequestBody UserUpdateDTO userUpdateDTO){
+        return UserService.updateUser(id, userUpdateDTO);
     }
+    
 
     @GetMapping("/User/count")
     public long contador(){
