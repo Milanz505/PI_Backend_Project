@@ -85,7 +85,7 @@ public class AnuncioService {
             repositorio.save(user);
         }
     
-        return new ResponseEntity<>("Like added successfully", HttpStatus.OK);
+        return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> removeLike(UUID anuncioId, UUID userId) {
@@ -107,7 +107,7 @@ public class AnuncioService {
             repositorio.save(user);
         }
     
-        return new ResponseEntity<>("Like removed successfully", HttpStatus.OK);
+        return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
     }
 
 
