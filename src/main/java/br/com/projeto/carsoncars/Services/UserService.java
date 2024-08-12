@@ -24,7 +24,7 @@ import java.sql.Date;
 
 @SuppressWarnings("deprecation")
 @Service
-public class UserService {
+public class UserService {	
     // Chave secreta JWT definida manualmente (substitua esta chave pela sua própria)
     private static final String SECRET_KEY = "r1TCaDCyS+mT+eQgYHhiLVhO/VgApif3xdKpD7NWbjWfP0q9CGY7Xo78t/gfyUxjbfXhCnvNvwUHwBhREkFpGg==";
 
@@ -72,31 +72,44 @@ public class UserService {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
-        
-    }
-
+    } 
     public User updateUser(UUID id, UserUpdateDTO userUpdateDTO) {
         User user = action.findById(id).orElse(null);
         if (user == null) {
             return null;
         }
+    
+        // Atualizar nome se estiver presente
         if (userUpdateDTO.getNome() != null) {
             user.setNome(userUpdateDTO.getNome());
         }
+    
+        // Atualizar email se estiver presente
         if (userUpdateDTO.getEmail() != null) {
             user.setEmail(userUpdateDTO.getEmail());
         }
+    
+        // Validação e atualização de senha
         if (userUpdateDTO.getSenha() != null) {
+            if (userUpdateDTO.getSenha().isEmpty()) {
+                throw new IllegalArgumentException("A senha não pode estar vazia.");
+            }
+            if (!userUpdateDTO.getSenha().equals(userUpdateDTO.getConfirmarSenha())) {
+                throw new IllegalArgumentException("As senhas não conferem.");
+            }
+            if (!isValidPassword(userUpdateDTO.getSenha())) {
+                throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra minúscula, uma letra maiúscula e um caractere especial.");
+            }
             user.setSenha(passwordEncoder.encode(userUpdateDTO.getSenha()));
         }
-        if (userUpdateDTO.getConfirmarSenha() != null) {
-            user.setConfirmarSenha(passwordEncoder.encode(userUpdateDTO.getConfirmarSenha()));
-        }
+    
+        // Atualizar foto de perfil se estiver presente
         if (userUpdateDTO.getFotoDePerfil() != null) {
             user.setfotoDePerfil(userUpdateDTO.getFotoDePerfil());
         }
+    
         return action.save(user);
-    }
+    }        
 
 
     // Método para verificar se o e-mail é válido
