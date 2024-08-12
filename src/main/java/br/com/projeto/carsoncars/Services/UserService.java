@@ -81,11 +81,23 @@ public class UserService {
     
         // Atualizar nome se estiver presente
         if (userUpdateDTO.getNome() != null) {
+            if(userUpdateDTO.getNome().isEmpty()){
+                throw new IllegalArgumentException("O nome precisa ser preenchido.");
+            }
+            if(!isValidNome(userUpdateDTO.getNome())){
+                throw new IllegalArgumentException("O nome é inválido.");
+            }
             user.setNome(userUpdateDTO.getNome());
         }
     
         // Atualizar email se estiver presente
         if (userUpdateDTO.getEmail() != null) {
+            if(userUpdateDTO.getEmail().isEmpty()){
+                throw new IllegalArgumentException("O email precisa ser preenchido.");
+            }
+            if(!isValidEmail(userUpdateDTO.getEmail())){
+                throw new IllegalArgumentException("O endereço de email é inválido.");
+            }
             user.setEmail(userUpdateDTO.getEmail());
         }
     
@@ -129,6 +141,15 @@ public class UserService {
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
     }
+
+    private boolean isValidNome(String nome) {
+        // Nome deve ter pelo menos 5 caracteres e conter pelo menos uma letra maiúscula
+        String regex = "^(?=.*[A-Z])[a-zA-Z]{5,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(nome);
+        return matcher.matches();
+    }
+      
 
     // Método para verificar se a senha de confirmação é igual à senha
     private boolean isConfirmPasswordValid(String password, String confirmPassword) {
