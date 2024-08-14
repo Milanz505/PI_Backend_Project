@@ -2,6 +2,7 @@ package br.com.projeto.carsoncars.Controle;
 
 import java.io.IOException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -59,4 +60,6 @@ public class FipeControle {
             return ResponseEntity.status(500).body("Erro ao buscar dados FIPE: " + e.getMessage());
         }
     }
+
+
 }
