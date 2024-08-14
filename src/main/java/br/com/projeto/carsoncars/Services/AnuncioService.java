@@ -1,6 +1,6 @@
 package br.com.projeto.carsoncars.Services;
 
-import java.time.Year;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -18,8 +18,10 @@ import br.com.projeto.carsoncars.Repository.Repositorio;
 
 
 
+
 @Service
 public class AnuncioService {
+
 
     @Autowired
     private Repositorio repositorio;
@@ -27,8 +29,8 @@ public class AnuncioService {
     @Autowired
     private AnuncioRepository action;
 
-    public ResponseEntity<?> createAnuncio(String marca, String modelo, String nomeDoAutomovel, String tempoDeUso,
-                                           Year ano, float preco, String descricao, String email, String[] imageUrl) {
+    public ResponseEntity<?> createAnuncio(String marca, String modelo, String tempoDeUso,
+                                           String ano, float preco, String descricao, String email, String[] imageUrl) {
 
         User user = (User) action.findByUserEmail(email);
 
@@ -36,28 +38,30 @@ public class AnuncioService {
             return new ResponseEntity<>("Invalid user", HttpStatus.UNAUTHORIZED);
         }
 
-        if (marca == null || modelo == null || nomeDoAutomovel == null || ano == null || preco < 0 || descricao == null || descricao.length() > 300) {
+        if (marca == null || modelo == null || ano == null || preco < 0 || descricao == null || descricao.length() > 300) {
             return new ResponseEntity<>("Invalid fields", HttpStatus.BAD_REQUEST);
         }
-
-        
-        
 
         if (imageUrl == null) {
             return new ResponseEntity<>("Error saving image", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        
 
+    
         Anuncio anuncio = new Anuncio();
         anuncio.setMarca(marca);
         anuncio.setModelo(modelo);
-        anuncio.setNomeDoAutomovel(nomeDoAutomovel);
         anuncio.setTempoDeUso(tempoDeUso);
         anuncio.setAno(ano);
         anuncio.setPreco(preco);
         anuncio.setDescricao(descricao);
         anuncio.setImageUrl(imageUrl);
         anuncio.setUser(user);
+ 
 
+ 
+
+        // Salvando o anúncio com o valor FIPE
         action.save(anuncio);
 
         Map<String, String> response = new HashMap<>();

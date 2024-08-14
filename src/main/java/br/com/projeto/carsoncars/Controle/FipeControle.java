@@ -61,5 +61,14 @@ public class FipeControle {
         }
     }
 
+    @GetMapping("/marcas/nome/{nomeMarca}")
+    public ResponseEntity<String> getMarcaIdByName(@PathVariable String nomeMarca) {
+        try {
+            String marcaId = fipeService.getMarcaIdByName(nomeMarca);
+            return ResponseEntity.ok(marcaId);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erro ao buscar ID da marca: " + e.getMessage());
+        }
+    }
 
 }

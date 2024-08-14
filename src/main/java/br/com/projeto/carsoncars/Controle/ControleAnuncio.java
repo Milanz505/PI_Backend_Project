@@ -1,5 +1,6 @@
 package br.com.projeto.carsoncars.Controle;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,11 +13,14 @@ import org.springframework.http.ResponseEntity;
 import br.com.projeto.carsoncars.Services.AnuncioService;
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
+import br.com.projeto.carsoncars.Services.FipeService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ControleAnuncio {
 
+    @Autowired
+    private FipeService fipeService;
 
     @Autowired
     private AnuncioService anuncioService;
@@ -26,6 +30,12 @@ public class ControleAnuncio {
 
     @PostMapping("/anuncio")
     public Anuncio createAnuncio(@RequestBody Anuncio anuncio) {
+        try {
+            
+            anuncio.setValorFipe(fipeService.getFipe(anuncio.getMarca(), anuncio.getModelo(), anuncio.getAno()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return anuncioRepository.save(anuncio);
     }
 
