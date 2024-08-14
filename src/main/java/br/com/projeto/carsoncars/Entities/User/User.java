@@ -85,11 +85,11 @@ public class User {
         this.admState = admState;
     }
 
-    public String getfotoDePerfil() {
+    public String getFotoDePerfil() {
         return fotoDePerfil;
     }
 
-    public void setfotoDePerfil(String fotoDePefil) {
+    public void setFotoDePerfil(String fotoDePefil) {
         this.fotoDePerfil = fotoDePefil;
     }
 

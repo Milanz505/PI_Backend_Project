@@ -79,49 +79,57 @@ public class UserService {
             return null;
         }
     
-        // Atualizar nome se estiver presente
+        // Atualizar nome se estiver presente e não vazio
         if (userUpdateDTO.getNome() != null) {
-            if(userUpdateDTO.getNome().isEmpty()){
-                throw new IllegalArgumentException("O nome precisa ser preenchido.");
+            if (userUpdateDTO.getNome().isEmpty()) {
+                userUpdateDTO.setNome(user.getNome());
+            } else {
+                if (!isValidNome(userUpdateDTO.getNome())) {
+                    throw new IllegalArgumentException("O nome é inválido.");
+                }
+                user.setNome(userUpdateDTO.getNome());
             }
-            if(!isValidNome(userUpdateDTO.getNome())){
-                throw new IllegalArgumentException("O nome é inválido.");
-            }
-            user.setNome(userUpdateDTO.getNome());
         }
     
-        // Atualizar email se estiver presente
+        // Atualizar email se estiver presente e não vazio
         if (userUpdateDTO.getEmail() != null) {
-            if(userUpdateDTO.getEmail().isEmpty()){
-                throw new IllegalArgumentException("O email precisa ser preenchido.");
+            if (userUpdateDTO.getEmail().isEmpty()) {
+                userUpdateDTO.setEmail(user.getEmail());
+            } else {
+                if (!isValidEmail(userUpdateDTO.getEmail())) {
+                    throw new IllegalArgumentException("O endereço de email é inválido.");
+                }
+                user.setEmail(userUpdateDTO.getEmail());
             }
-            if(!isValidEmail(userUpdateDTO.getEmail())){
-                throw new IllegalArgumentException("O endereço de email é inválido.");
-            }
-            user.setEmail(userUpdateDTO.getEmail());
         }
     
         // Validação e atualização de senha
         if (userUpdateDTO.getSenha() != null) {
             if (userUpdateDTO.getSenha().isEmpty()) {
-                throw new IllegalArgumentException("A senha não pode estar vazia.");
+                userUpdateDTO.setSenha(user.getSenha());
+            } else {
+                if (!userUpdateDTO.getSenha().equals(userUpdateDTO.getConfirmarSenha())) {
+                    throw new IllegalArgumentException("As senhas não conferem.");
+                }
+                if (!isValidPassword(userUpdateDTO.getSenha())) {
+                    throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra minúscula, uma letra maiúscula e um caractere especial.");
+                }
+                user.setSenha(passwordEncoder.encode(userUpdateDTO.getSenha()));
             }
-            if (!userUpdateDTO.getSenha().equals(userUpdateDTO.getConfirmarSenha())) {
-                throw new IllegalArgumentException("As senhas não conferem.");
-            }
-            if (!isValidPassword(userUpdateDTO.getSenha())) {
-                throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres, incluindo um número, uma letra minúscula, uma letra maiúscula e um caractere especial.");
-            }
-            user.setSenha(passwordEncoder.encode(userUpdateDTO.getSenha()));
         }
     
         // Atualizar foto de perfil se estiver presente
         if (userUpdateDTO.getFotoDePerfil() != null) {
-            user.setfotoDePerfil(userUpdateDTO.getFotoDePerfil());
+            if (userUpdateDTO.getFotoDePerfil().isEmpty()) {
+                userUpdateDTO.setFotoDePerfil(user.getFotoDePerfil());
+            } else {
+                user.setFotoDePerfil(userUpdateDTO.getFotoDePerfil());
+            }
         }
     
         return action.save(user);
-    }        
+    }
+           
 
 
     // Método para verificar se o e-mail é válido
