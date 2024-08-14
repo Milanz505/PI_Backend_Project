@@ -151,12 +151,12 @@ public class UserService {
     }
 
     private boolean isValidNome(String nome) {
-        // Nome deve ter pelo menos 5 caracteres e conter pelo menos uma letra maiúscula
-        String regex = "^(?=.*[A-Z])[a-zA-Z]{5,}$";
+        String regex = "^(?=.*[A-Z])[a-zA-Z0-9]{5,}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(nome);
         return matcher.matches();
     }
+    
       
 
     // Método para verificar se a senha de confirmação é igual à senha
