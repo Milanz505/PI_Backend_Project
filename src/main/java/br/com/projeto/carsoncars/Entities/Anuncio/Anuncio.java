@@ -1,7 +1,6 @@
 package br.com.projeto.carsoncars.Entities.Anuncio;
 
 
-import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -36,14 +35,12 @@ public class Anuncio {
     @Column(name = "modelo", nullable = false)
     private String modelo;
 
-    @Column(name = "nome_do_automovel", nullable = false)
-    private String nomeDoAutomovel;
-
+ 
     @Column(name = "tempo_de_uso", nullable = false)
     private String tempoDeUso;
 
     @Column(name = "ano", nullable = false)
-    private Year ano;
+    private String ano;
 
     @Column(name = "preco", nullable = false)
     private float preco;
@@ -54,6 +51,8 @@ public class Anuncio {
     @Column(name = "imagem_url")
     private String[] imageUrl;
 
+    @Column(name = "ValorFipe")
+    private String valorFipe;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
@@ -99,13 +98,6 @@ public class Anuncio {
         this.modelo = modelo;
     }
 
-    public String getNomeDoAutomovel() {
-        return nomeDoAutomovel;
-    }
-
-    public void setNomeDoAutomovel(String nomeDoAutomovel) {
-        this.nomeDoAutomovel = nomeDoAutomovel;
-    }
 
     public String getTempoDeUso() {
         return tempoDeUso;
@@ -115,11 +107,11 @@ public class Anuncio {
         this.tempoDeUso = tempoDeUso2;
     }
 
-    public Year getAno() {
+    public String getAno() {
         return ano;
     }
 
-    public void setAno(Year ano) {
+    public void setAno(String ano) {
         this.ano = ano;
     }
 
@@ -163,4 +155,11 @@ public class Anuncio {
         this.likedByUsers = likedByUsers;
     }
 
+    public String getValorFipe() {
+        return valorFipe;
+    }   
+
+    public void setValorFipe(String valorFipeString) {
+        this.valorFipe = valorFipeString;
+    }   
 }
