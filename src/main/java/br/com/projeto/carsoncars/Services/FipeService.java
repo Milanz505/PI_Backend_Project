@@ -61,7 +61,7 @@ public class FipeService {
     }
 
     public String getMarcaIdByName(String nomeMarca) throws IOException {
-        String url = BASE_URL + "/marcas";  // Certifique-se de que esta é a URL correta
+        String url = BASE_URL + "";  // Certifique-se de que esta é a URL correta
         HttpGet request = new HttpGet(url);
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -94,6 +94,42 @@ public class FipeService {
             throw new IOException("Marca not found with name: " + nomeMarca);
         }
     }
-}
+
+    public String getModeloIdByName(String marcaId, String nomeModelo) throws IOException {
+        String url = BASE_URL + marcaId + "/modelos";  // Certifique-se de que esta é a URL correta
+        HttpGet request = new HttpGet(url);
+    
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();
+             CloseableHttpResponse response = httpClient.execute(request)) {
+    
+            String jsonResponse = EntityUtils.toString(response.getEntity());
+    
+            // Verifique a resposta para entender o formato
+            System.out.println("API Response: " + jsonResponse);
+    
+            ObjectMapper mapper = new ObjectMapper();
+    
+            // Ajuste o tipo de dados se necessário
+            JsonNode rootNode = mapper.readTree(jsonResponse);
+    
+            // Verifique se o JSON contém uma chave de erro
+            if (rootNode.has("error")) {
+                throw new IOException("API returned error: " + rootNode.get("error").asText());
+            }
+    
+            // Ajuste a deserialização conforme necessário
+            JsonNode modelosNode = rootNode.path("modelos");
+            List<Map<String, String>> modelos = mapper.convertValue(modelosNode, new TypeReference<List<Map<String, String>>>() {});
+    
+            for (Map<String, String> modelo : modelos) {
+                if (modelo.get("nome").equalsIgnoreCase(nomeModelo)) {
+                    return modelo.get("codigo");
+                }
+            }
+    
+            throw new IOException("Modelo not found with name: " + nomeModelo);
+        }
+    }
+}    
 
 

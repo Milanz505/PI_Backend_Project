@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.http.HttpStatus;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +31,37 @@ public class ControleAnuncio {
     private AnuncioRepository anuncioRepository;
 
     @PostMapping("/anuncio")
-    public Anuncio createAnuncio(@RequestBody Anuncio anuncio) {
+    public ResponseEntity<?> createAnuncio(@RequestBody Anuncio anuncio) {
         try {
-            
-            anuncio.setValorFipe(fipeService.getFipe(anuncio.getMarca(), anuncio.getModelo(), anuncio.getAno()));
+            // Obter o ID da marca pelo nome
+            String marcaId = fipeService.getMarcaIdByName(anuncio.getMarca());
+            if (marcaId == null) {
+                return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body("Marca não encontrada: " + anuncio.getMarca());
+            }
+    
+            // Obter o ID do modelo pelo nome e ID da marca
+            String modeloId = fipeService.getModeloIdByName(marcaId, anuncio.getModelo());
+            if (modeloId == null) {
+                return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body("Modelo não encontrado: " + anuncio.getModelo());
+            }
+    
+            // Obter o valor FIPE usando os IDs da marca e do modelo
+            String valorFipe = fipeService.getFipe(marcaId, modeloId, anuncio.getAno());
+            anuncio.setValorFipe(valorFipe);
+    
+            // Salvar o anúncio no banco de dados
+            Anuncio savedAnuncio = anuncioRepository.save(anuncio);
+            return ResponseEntity.status(HttpStatus.SC_CREATED).body(savedAnuncio);
+    
         } catch (IOException e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("Erro ao buscar valor FIPE: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).body("Ocorreu um erro: " + e.getMessage());
         }
-        return anuncioRepository.save(anuncio);
     }
+    
 
     @GetMapping("/anuncio")
     public Page<Anuncio> getAllAnuncios(Pageable pageable){

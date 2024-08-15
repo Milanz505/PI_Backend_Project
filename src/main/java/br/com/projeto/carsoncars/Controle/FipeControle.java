@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.projeto.carsoncars.Services.FipeService;
 
+
+
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/fipe")
@@ -71,4 +73,16 @@ public class FipeControle {
         }
     }
 
+    @GetMapping("/marcas/{marcaId}/modelos/nome/{nomeModelo}")
+    public ResponseEntity<String> getModeloIdByName(@PathVariable String marcaId, @PathVariable String nomeModelo) {
+        try {
+            String modeloId = fipeService.getModeloIdByName(marcaId, nomeModelo);
+            return ResponseEntity.ok(modeloId);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Erro ao buscar ID do modelo: " + e.getMessage());
+        }
+    }
 }
+    
+
+
