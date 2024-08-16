@@ -2,6 +2,7 @@ package br.com.projeto.carsoncars.Controle;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.http.HttpStatus;
@@ -103,5 +104,13 @@ public class ControleAnuncio {
     public ResponseEntity<?> unlikeAnuncio(@PathVariable UUID anuncioId, @PathVariable UUID userId) {
         return anuncioService.removeLike(anuncioId, userId);
     }
+
+    @PostMapping("/anuncio/{anuncioId}/comentario/{userId}")
+    public ResponseEntity<?> addComentario(@PathVariable UUID anuncioId, @PathVariable UUID userId, @RequestBody Map<String, String> requestBody) {
+        String numero = requestBody.get("numero");
+        String comentario = requestBody.get("comentario");
+        return anuncioService.addComentario(anuncioId, userId, numero, comentario);
+    }
+    
 
 }

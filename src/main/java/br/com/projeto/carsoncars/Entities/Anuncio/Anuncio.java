@@ -1,24 +1,24 @@
 package br.com.projeto.carsoncars.Entities.Anuncio;
 
-
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import br.com.projeto.carsoncars.Entities.User.User; 
+import br.com.projeto.carsoncars.Entities.User.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue; 
-import jakarta.persistence.GenerationType; 
-import jakarta.persistence.Id; 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne; 
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
-
-
-
 
 @Entity
 @Table(name = "anuncio")
@@ -35,7 +35,6 @@ public class Anuncio {
     @Column(name = "modelo", nullable = false)
     private String modelo;
 
- 
     @Column(name = "tempo_de_uso", nullable = false)
     private String tempoDeUso;
 
@@ -63,14 +62,13 @@ public class Anuncio {
         name = "anuncio_likes",
         joinColumns = @JoinColumn(name = "anuncio_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
-        
     )
     private Set<User> likedByUsers = new HashSet<>();
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Relação User->Anuncio
-
+    @ElementCollection
+    @MapKeyColumn(name = "user_id")
+    @Column(name = "comentario")
+    private Map<UUID, String> comentarios = new HashMap<>();
 
     // Getters and setters
 
@@ -98,13 +96,12 @@ public class Anuncio {
         this.modelo = modelo;
     }
 
-
     public String getTempoDeUso() {
         return tempoDeUso;
     }
 
-    public void setTempoDeUso(String tempoDeUso2) {
-        this.tempoDeUso = tempoDeUso2;
+    public void setTempoDeUso(String tempoDeUso) {
+        this.tempoDeUso = tempoDeUso;
     }
 
     public String getAno() {
@@ -157,9 +154,17 @@ public class Anuncio {
 
     public String getValorFipe() {
         return valorFipe;
-    }   
+    }
 
-    public void setValorFipe(String valorFipeString) {
-        this.valorFipe = valorFipeString;
-    }   
+    public void setValorFipe(String valorFipe) {
+        this.valorFipe = valorFipe;
+    }
+
+    public Map<UUID, String> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(Map<UUID, String> comentarios) {
+        this.comentarios = comentarios;
+    }
 }

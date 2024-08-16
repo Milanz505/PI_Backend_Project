@@ -114,5 +114,34 @@ public class AnuncioService {
         return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
     }
 
+public ResponseEntity<?> addComentario(UUID anuncioId, UUID userId, String numero, String comentario) {
+    Optional<Anuncio> anuncioOpt = action.findById(anuncioId);
+    Optional<User> userOpt = repositorio.findById(userId);
+
+    if (!anuncioOpt.isPresent()) {
+        return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
+    }
+
+    if (!userOpt.isPresent()) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
+
+    Anuncio anuncio = anuncioOpt.get();
+    User user = userOpt.get();
+
+    if (!anuncio.getLikedByUsers().contains(user)) {
+        return new ResponseEntity<>("User has not liked this anuncio", HttpStatus.FORBIDDEN);
+    }
+
+    if (comentario != null && !comentario.isEmpty() && numero != null && !numero.isEmpty()) {
+        String comentarioCompleto = "Número: " + numero + " - Comentário: " + comentario;
+        anuncio.getComentarios().put(userId, comentarioCompleto);
+        action.save(anuncio);
+    }
+
+    return new ResponseEntity<>(anuncio.getComentarios(), HttpStatus.OK);
+}
+
+    
 
 }
