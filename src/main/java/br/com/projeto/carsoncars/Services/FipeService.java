@@ -20,10 +20,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class FipeService {
 
     private static final String BASE_URL = "https://parallelum.com.br/fipe/api/v1/carros/marcas/";
+    private static final String SUBSCRIPTION_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OGMyZjhjMC1mYjNkLTRjYjMtOGE3ZS0xYzM4YmEzMGUxNTkiLCJlbWFpbCI6Im1hdGV1c2YuMjAyMkBhbHVub3MudXRmcHIuZWR1LmJyIiwic3RyaXBlU3Vic2NyaXB0aW9uSWQiOiJzdWJfMVBvRUxQQ1N2SXMwOHRJRTNDZVdxRDNBIiwiaWF0IjoxNzIzNzY5MzM5fQ.3tjVhF-ubRotZdjcRe4JZayiwu9m-a8LwYW73IyYh9Q"; // Adicione seu token aqui
+
+
+    private HttpGet createRequestWithToken(String url) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader("X-Subscription-Token", SUBSCRIPTION_TOKEN);
+        request.addHeader("Content-Type", "application/json"); // Adicione mais headers se necessário
+        return request;
+    }
 
     public String getMarcas() throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(BASE_URL);
+            HttpGet request = createRequestWithToken(BASE_URL);  // Usa o método que adiciona o token
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return EntityUtils.toString(response.getEntity());
             }
@@ -33,7 +42,7 @@ public class FipeService {
     public String getModelos(String marcaId) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = BASE_URL + marcaId + "/modelos";
-            HttpGet request = new HttpGet(url);
+            HttpGet request = createRequestWithToken(url);  // Usa o método que adiciona o token
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return EntityUtils.toString(response.getEntity());
             }
@@ -43,7 +52,7 @@ public class FipeService {
     public String getAnos(String marcaId, String modeloId) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = BASE_URL + marcaId + "/modelos/" + modeloId + "/anos";
-            HttpGet request = new HttpGet(url);
+            HttpGet request = createRequestWithToken(url);  // Usa o método que adiciona o token
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return EntityUtils.toString(response.getEntity());
             }
@@ -53,83 +62,65 @@ public class FipeService {
     public String getFipe(String marcaId, String modeloId, String ano) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = BASE_URL + marcaId + "/modelos/" + modeloId + "/anos/" + ano;
-            HttpGet request = new HttpGet(url);
+            HttpGet request = createRequestWithToken(url);  // Usa o método que adiciona o token
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return EntityUtils.toString(response.getEntity());
             }
         }
     }
 
+    // Outras funções continuam, sempre usando o método createRequestWithToken para incluir o token
+
     public String getMarcaIdByName(String nomeMarca) throws IOException {
-        String url = BASE_URL + "";  // Certifique-se de que esta é a URL correta
-        HttpGet request = new HttpGet(url);
+        HttpGet request = createRequestWithToken(BASE_URL + "");  // Inclui o token aqui
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(request)) {
 
             String jsonResponse = EntityUtils.toString(response.getEntity());
-
-            // Verifique a resposta para entender o formato
-            System.out.println("API Response: " + jsonResponse);
-
             ObjectMapper mapper = new ObjectMapper();
-
-            // Ajuste o tipo de dados se necessário
             JsonNode rootNode = mapper.readTree(jsonResponse);
 
-            // Verifique se o JSON contém uma chave de erro
             if (rootNode.has("error")) {
                 throw new IOException("API returned error: " + rootNode.get("error").asText());
             }
 
-            // Ajuste a deserialização conforme necessário
             List<Map<String, String>> marcas = mapper.convertValue(rootNode, new TypeReference<List<Map<String, String>>>() {});
-
             for (Map<String, String> marca : marcas) {
                 if (marca.get("nome").equalsIgnoreCase(nomeMarca)) {
                     return marca.get("codigo");
                 }
             }
-
             throw new IOException("Marca not found with name: " + nomeMarca);
         }
     }
 
     public String getModeloIdByName(String marcaId, String nomeModelo) throws IOException {
-        String url = BASE_URL + marcaId + "/modelos";  // Certifique-se de que esta é a URL correta
-        HttpGet request = new HttpGet(url);
-    
+        String url = BASE_URL + marcaId + "/modelos";
+        HttpGet request = createRequestWithToken(url);  // Inclui o token aqui
+
         try (CloseableHttpClient httpClient = HttpClients.createDefault();
              CloseableHttpResponse response = httpClient.execute(request)) {
-    
+
             String jsonResponse = EntityUtils.toString(response.getEntity());
-    
-            // Verifique a resposta para entender o formato
-            System.out.println("API Response: " + jsonResponse);
-    
             ObjectMapper mapper = new ObjectMapper();
-    
-            // Ajuste o tipo de dados se necessário
             JsonNode rootNode = mapper.readTree(jsonResponse);
-    
-            // Verifique se o JSON contém uma chave de erro
+
             if (rootNode.has("error")) {
                 throw new IOException("API returned error: " + rootNode.get("error").asText());
             }
-    
-            // Ajuste a deserialização conforme necessário
+
             JsonNode modelosNode = rootNode.path("modelos");
             List<Map<String, String>> modelos = mapper.convertValue(modelosNode, new TypeReference<List<Map<String, String>>>() {});
-    
             for (Map<String, String> modelo : modelos) {
                 if (modelo.get("nome").equalsIgnoreCase(nomeModelo)) {
                     return modelo.get("codigo");
                 }
             }
-    
             throw new IOException("Modelo not found with name: " + nomeModelo);
         }
     }
-}    
+}
+   
 
 
