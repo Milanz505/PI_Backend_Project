@@ -112,5 +112,10 @@ public class ControleAnuncio {
         return anuncioService.addComentario(anuncioId, userId, numero, comentario);
     }
     
-
+    @GetMapping("/anuncio/{anuncioId}/likes")
+    public ResponseEntity<?> getLikes(@PathVariable UUID anuncioId) {
+        return anuncioService.getLikes(anuncioId);
+    }
 }
+
+

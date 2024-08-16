@@ -140,6 +140,16 @@ public ResponseEntity<?> addComentario(UUID anuncioId, UUID userId, String numer
     return new ResponseEntity<>(anuncio.getComentarios(), HttpStatus.OK);
 }
 
+public ResponseEntity<?> getLikes(UUID anuncioId) {
+    Optional<Anuncio> anuncioOpt = action.findById(anuncioId);
+
+    if (!anuncioOpt.isPresent()) {
+        return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
+    }
+
+    Anuncio anuncio = anuncioOpt.get();
+    return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
+}
     
 
 }
