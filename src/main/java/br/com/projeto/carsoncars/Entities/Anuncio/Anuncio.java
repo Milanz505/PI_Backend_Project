@@ -2,6 +2,7 @@ package br.com.projeto.carsoncars.Entities.Anuncio;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -47,8 +48,9 @@ public class Anuncio {
     @Column(name = "descricao", nullable = false, length = 300)
     private String descricao;
 
+    @ElementCollection
     @Column(name = "imagem_url")
-    private String[] imageUrl;
+    private List<String> imageUrl;
 
     @Column(name = "ValorFipe")
     private String valorFipe;
@@ -128,11 +130,11 @@ public class Anuncio {
         this.descricao = descricao;
     }
 
-    public String[] getImageUrl() {
+    public List<String> getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String[] imageUrl) {
+    public void setImageUrl(List<String> imageUrl) {
         this.imageUrl = imageUrl;
     }
 

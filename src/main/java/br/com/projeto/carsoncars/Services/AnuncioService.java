@@ -2,6 +2,7 @@ package br.com.projeto.carsoncars.Services;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class AnuncioService {
     private AnuncioRepository action;
 
     public ResponseEntity<?> createAnuncio(String marca, String modelo, String tempoDeUso,
-                                           String ano, float preco, String descricao, String email, String[] imageUrl) {
+                                           String ano, float preco, String descricao, String email, List<String> imageUrl) {
 
         User user = (User) action.findByUserEmail(email);
 
@@ -57,9 +58,6 @@ public class AnuncioService {
         anuncio.setDescricao(descricao);
         anuncio.setImageUrl(imageUrl);
         anuncio.setUser(user);
- 
-
- 
 
         // Salvando o anúncio com o valor FIPE
         action.save(anuncio);
