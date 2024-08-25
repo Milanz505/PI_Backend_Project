@@ -18,6 +18,7 @@ import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Repository.AnuncioRepository;
 import br.com.projeto.carsoncars.Services.FipeService;
 
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ControleAnuncio {
@@ -112,6 +113,11 @@ public class ControleAnuncio {
         return anuncioService.addComentario(anuncioId, userId, numero, comentario);
     }
     
+    @GetMapping("/anuncio/comentario/{anuncioId}")
+    public ResponseEntity<?> getComentarios(@PathVariable UUID anuncioId) {
+        return anuncioService.getComentarios(anuncioId);
+    }    
+
     @GetMapping("/anuncio/{anuncioId}/likes")
     public ResponseEntity<?> getLikes(@PathVariable UUID anuncioId) {
         return anuncioService.getLikes(anuncioId);

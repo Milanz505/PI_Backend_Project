@@ -1,6 +1,7 @@
 package br.com.projeto.carsoncars.Services;
 
 
+import java.lang.classfile.ClassFile.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +139,21 @@ public ResponseEntity<?> addComentario(UUID anuncioId, UUID userId, String numer
     }
 
     return new ResponseEntity<>(anuncio.getComentarios(), HttpStatus.OK);
+}
+
+public ResponseEntity<?> getComentarios(UUID anuncioId) {
+    Optional<Anuncio> anuncioOpt = action.findById(anuncioId);
+
+    if (!anuncioOpt.isPresent()) {
+        return new ResponseEntity<>("Anuncio not found", HttpStatus.NOT_FOUND);
+    }
+
+    Anuncio anuncio = anuncioOpt.get();
+    Map<String, Object> response = new HashMap<>();
+    response.put("comentarios", anuncio.getComentarios());
+    response.put("usuarios", anuncio.getUser()); // Assuming getUsuarios() method exists
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
 }
 
 public ResponseEntity<?> getLikes(UUID anuncioId) {
