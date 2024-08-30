@@ -6,6 +6,7 @@ public class UserUpdateDTO {
     private String senha;
     private String confirmarSenha;
     private String fotoDePerfil;
+    private boolean admState;
 
     // Getters and setters
     public String getNome() {
@@ -47,5 +48,13 @@ public class UserUpdateDTO {
     public void setFotoDePerfil(String fotoDePerfil) {
         this.fotoDePerfil = fotoDePerfil;
     }
-    
+
+    public void setAdmState(boolean admState){
+        this.admState = admState;
+    }
+
+    public boolean getAdmState(){
+        return this.admState;
+    }
+
 }

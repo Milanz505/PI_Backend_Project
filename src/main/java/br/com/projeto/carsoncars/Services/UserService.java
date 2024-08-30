@@ -126,6 +126,8 @@ public class UserService {
                 user.setFotoDePerfil(userUpdateDTO.getFotoDePerfil());
             }
         }
+        
+        user.setAdmState(userUpdateDTO.getAdmState());
     
         return action.save(user);
     }

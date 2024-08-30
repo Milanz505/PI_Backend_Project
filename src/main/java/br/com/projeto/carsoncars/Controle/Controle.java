@@ -127,10 +127,6 @@ public long getAnuncioCount() {
 
     // LOCALHOST
 
-    @GetMapping("")
-    public String mensagem(){
-        return "oiiiii :3";
-    }
 
     @PostMapping("/carsoncars")
     public User user(@RequestBody User u){
