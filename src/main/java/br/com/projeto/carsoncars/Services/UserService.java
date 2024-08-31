@@ -48,8 +48,17 @@ public class UserService {
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         } else if(!isValidPassword(obj.getSenha()) || !isConfirmPasswordValid(obj.getSenha(), obj.getConfirmarSenha())) {
             message.setMessage("A senha não atende aos requisitos mínimos ou as senhas não conferem !!!");
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-        } else {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);  
+        }else if (action.findByEmail(obj.getEmail()) != null) {
+            message.setMessage("O endereço de email já está em uso !!!");
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);   
+        }
+        else if (action.findByNomeContaining(obj.getNome()) != null) {
+            message.setMessage("O nome já está em uso !!!");
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);   
+        }
+        
+         else {
             // Encripta a senha antes de salvar
             obj.setSenha(passwordEncoder.encode(obj.getSenha()));
             obj.setConfirmarSenha(passwordEncoder.encode(obj.getConfirmarSenha()));
@@ -87,6 +96,9 @@ public class UserService {
                 if (!isValidNome(userUpdateDTO.getNome())) {
                     throw new IllegalArgumentException("O nome é inválido.");
                 }
+                else if (action.findByNomeContaining(userUpdateDTO.getNome()) != null) {
+                    throw new IllegalArgumentException("O nome já está em uso.");
+                }
                 user.setNome(userUpdateDTO.getNome());
             }
         }
@@ -98,6 +110,9 @@ public class UserService {
             } else {
                 if (!isValidEmail(userUpdateDTO.getEmail())) {
                     throw new IllegalArgumentException("O endereço de email é inválido.");
+                }
+                else if (action.findByEmail(userUpdateDTO.getEmail()) != null) {
+                    throw new IllegalArgumentException("O endereço de email já está em uso.");
                 }
                 user.setEmail(userUpdateDTO.getEmail());
             }
