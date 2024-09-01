@@ -12,3 +12,4 @@ public class ObjMsg {
     private String user;
     private String msg;
 }
+

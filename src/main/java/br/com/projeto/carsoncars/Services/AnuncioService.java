@@ -1,5 +1,9 @@
 package br.com.projeto.carsoncars.Services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
 import br.com.projeto.carsoncars.Entities.User.User;
@@ -135,6 +135,7 @@ public ResponseEntity<?> addComentario(UUID anuncioId, UUID userId, String numer
         String comentarioCompleto = "Número: " + numero + " - Comentário: " + comentario;
         anuncio.getComentarios().put(userId, comentarioCompleto);
         action.save(anuncio);
+
     }
 
     return new ResponseEntity<>(anuncio.getComentarios(), HttpStatus.OK);

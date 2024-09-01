@@ -8,11 +8,13 @@ import br.com.projeto.carsoncars.ConfigChat.ObjMsg;
 
 @Controller
 public class App {
-
+    
     @MessageMapping("/chatMessage")
     @SendTo("/canal")
     public ObjMsg sendMessage(ObjMsg message){
         return message;
     }
 
+
 }
+
