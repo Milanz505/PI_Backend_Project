@@ -165,6 +165,6 @@ public ResponseEntity<?> getLikes(UUID anuncioId) {
     Anuncio anuncio = anuncioOpt.get();
     return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
 }
-    
+
 
 }

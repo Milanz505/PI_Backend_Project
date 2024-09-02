@@ -122,6 +122,39 @@ public class ControleAnuncio {
     public ResponseEntity<?> getLikes(@PathVariable UUID anuncioId) {
         return anuncioService.getLikes(anuncioId);
     }
+
+    @GetMapping("/anuncio/preco-entre/{precoMin}/{precoMax}")
+    public List<Anuncio> getAnunciosByPreco(@PathVariable float precoMin, @PathVariable float precoMax) {
+        return anuncioRepository.findByPrecoBetween(precoMin, precoMax);
+    }
+
+    @GetMapping("/anuncio/marca/{marca}")
+    public List<Anuncio> getAnunciosByMarca(@PathVariable String marca) {
+        return anuncioRepository.findByMarca(marca);
+    }
+
+    @GetMapping("/anuncio/modelo/{modelo}")
+    public List<Anuncio> getAnunciosByModelo(@PathVariable String modelo) {
+        return anuncioRepository.findByModelo(modelo);
+    }
+
+    @GetMapping("/anuncio/ano/{ano}")
+    public List<Anuncio> getAnunciosByAno(@PathVariable String ano) {
+        return anuncioRepository.findByAno(ano);
+    }
+
+    @GetMapping("/anuncio/ano-entre/{anoMin}/{anoMax}")
+    public List<Anuncio> getAnunciosByAnoBetween(@PathVariable String anoMin, @PathVariable String anoMax) {
+        return anuncioRepository.findByAnoBetween(anoMin, anoMax);
+    }
+
+    @GetMapping("/anuncio/search")
+    public List<Anuncio> searchAnuncios(@RequestParam String query) {
+    return anuncioRepository.searchAnuncios(query);
+
+}
+
+
 }
 
 
