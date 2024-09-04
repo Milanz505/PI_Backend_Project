@@ -27,18 +27,18 @@ public interface AnuncioRepository extends CrudRepository<Anuncio, UUID> { // Tr
 
     
     @Query("SELECT a FROM Anuncio a WHERE a.preco BETWEEN :precoMin AND :precoMax")
-    List<Anuncio> findByPrecoBetween(@Param("precoMin") float precoMin, @Param("precoMax") float precoMax);
+    Page<Anuncio> findByPrecoBetween(@Param("precoMin") float precoMin, @Param("precoMax") float precoMax, Pageable pageable);
 
-    List<Anuncio> findByMarca(String marca);
+    Page<Anuncio> findByMarca(String marca, Pageable pageable);
 
-    List<Anuncio> findByModelo(String modelo);
+    Page<Anuncio> findByModelo(String modelo, Pageable pageable);
 
-    List<Anuncio> findByAno(String ano);
+    Page<Anuncio> findByAno(String ano, Pageable pageable);
 
     @Query("SELECT a FROM Anuncio a WHERE a.ano BETWEEN :anoMin AND :anoMax")
-    List<Anuncio> findByAnoBetween(@Param("anoMin") String anoMin, @Param("anoMax") String anoMax);
+    Page<Anuncio> findByAnoBetween(@Param("anoMin") String anoMin, @Param("anoMax") String anoMax, Pageable pageable);
 
 
     @Query("SELECT a FROM Anuncio a WHERE a.ano LIKE %:query% OR a.modelo LIKE %:query% OR a.marca LIKE %:query%")
-    List<Anuncio> searchAnuncios(@Param("query") String query);
+    Page<Anuncio> searchAnuncios(@Param("query") String query, Pageable pageable);
 }

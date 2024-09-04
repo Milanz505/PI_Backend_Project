@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import br.com.projeto.carsoncars.Services.AnuncioService;
@@ -31,6 +32,9 @@ public class ControleAnuncio {
 
     @Autowired
     private AnuncioRepository anuncioRepository;
+
+    Pageable pageable = PageRequest.of(1, 20);
+
 
     @PostMapping("/anuncio")
     public ResponseEntity<?> createAnuncio(@RequestBody Anuncio anuncio) {
@@ -124,33 +128,38 @@ public class ControleAnuncio {
     }
 
     @GetMapping("/anuncio/preco-entre/{precoMin}/{precoMax}")
-    public List<Anuncio> getAnunciosByPreco(@PathVariable float precoMin, @PathVariable float precoMax) {
-        return anuncioRepository.findByPrecoBetween(precoMin, precoMax);
+    public Page<Anuncio> getAnunciosByPreco(@PathVariable float precoMin, @PathVariable float precoMax) {
+        return anuncioRepository.findByPrecoBetween(precoMin, precoMax,pageable);
     }
 
     @GetMapping("/anuncio/marca/{marca}")
-    public List<Anuncio> getAnunciosByMarca(@PathVariable String marca) {
-        return anuncioRepository.findByMarca(marca);
+    public Page<Anuncio> getAnunciosByMarca(@PathVariable String marca) {
+        Pageable pageable = PageRequest.of(0, 20);
+        return anuncioRepository.findByMarca(marca, pageable); 
     }
 
     @GetMapping("/anuncio/modelo/{modelo}")
-    public List<Anuncio> getAnunciosByModelo(@PathVariable String modelo) {
-        return anuncioRepository.findByModelo(modelo);
+    public Page<Anuncio> getAnunciosByModelo(@PathVariable String modelo) {
+        Pageable pageable = PageRequest.of(0, 20);
+        return anuncioRepository.findByModelo(modelo, pageable);
     }
 
     @GetMapping("/anuncio/ano/{ano}")
-    public List<Anuncio> getAnunciosByAno(@PathVariable String ano) {
-        return anuncioRepository.findByAno(ano);
+    public Page<Anuncio> getAnunciosByAno(@PathVariable String ano) {
+        Pageable pageable = PageRequest.of(0, 20);
+        return anuncioRepository.findByAno(ano, pageable);
     }
 
     @GetMapping("/anuncio/ano-entre/{anoMin}/{anoMax}")
-    public List<Anuncio> getAnunciosByAnoBetween(@PathVariable String anoMin, @PathVariable String anoMax) {
-        return anuncioRepository.findByAnoBetween(anoMin, anoMax);
+    public Page<Anuncio> getAnunciosByAnoBetween(@PathVariable String anoMin, @PathVariable String anoMax) {
+        Pageable pageable = PageRequest.of(0, 20);
+        return anuncioRepository.findByAnoBetween(anoMin, anoMax, pageable);
     }
 
     @GetMapping("/anuncio/search")
-    public List<Anuncio> searchAnuncios(@RequestParam String query) {
-    return anuncioRepository.searchAnuncios(query);
+    public Page<Anuncio> searchAnuncios(@RequestParam String query) {
+    Pageable pageable = PageRequest.of(0, 20);
+    return anuncioRepository.searchAnuncios(query, pageable);
 
 }
 
