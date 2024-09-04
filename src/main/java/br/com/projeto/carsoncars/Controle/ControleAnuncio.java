@@ -128,40 +128,36 @@ public class ControleAnuncio {
     }
 
     @GetMapping("/anuncio/preco-entre/{precoMin}/{precoMax}")
-    public Page<Anuncio> getAnunciosByPreco(@PathVariable float precoMin, @PathVariable float precoMax) {
-        return anuncioRepository.findByPrecoBetween(precoMin, precoMax,pageable);
+    public Page<Anuncio> getAnunciosByPreco(@PathVariable float precoMin, @PathVariable float precoMax,
+                                            Pageable pageable) {
+        return anuncioRepository.findByPrecoBetween(precoMin, precoMax, pageable);
     }
-
+    
     @GetMapping("/anuncio/marca/{marca}")
-    public Page<Anuncio> getAnunciosByMarca(@PathVariable String marca) {
-        Pageable pageable = PageRequest.of(0, 20);
-        return anuncioRepository.findByMarca(marca, pageable); 
+    public Page<Anuncio> getAnunciosByMarca(@PathVariable String marca, Pageable pageable) {
+        return anuncioRepository.findByMarca(marca, pageable);
     }
-
+    
     @GetMapping("/anuncio/modelo/{modelo}")
-    public Page<Anuncio> getAnunciosByModelo(@PathVariable String modelo) {
-        Pageable pageable = PageRequest.of(0, 20);
+    public Page<Anuncio> getAnunciosByModelo(@PathVariable String modelo, Pageable pageable) {
         return anuncioRepository.findByModelo(modelo, pageable);
     }
-
+    
     @GetMapping("/anuncio/ano/{ano}")
-    public Page<Anuncio> getAnunciosByAno(@PathVariable String ano) {
-        Pageable pageable = PageRequest.of(0, 20);
+    public Page<Anuncio> getAnunciosByAno(@PathVariable String ano, Pageable pageable) {
         return anuncioRepository.findByAno(ano, pageable);
     }
-
+    
     @GetMapping("/anuncio/ano-entre/{anoMin}/{anoMax}")
-    public Page<Anuncio> getAnunciosByAnoBetween(@PathVariable String anoMin, @PathVariable String anoMax) {
-        Pageable pageable = PageRequest.of(0, 20);
+    public Page<Anuncio> getAnunciosByAnoBetween(@PathVariable String anoMin, @PathVariable String anoMax,
+                                                 Pageable pageable) {
         return anuncioRepository.findByAnoBetween(anoMin, anoMax, pageable);
     }
 
     @GetMapping("/anuncio/search")
-    public Page<Anuncio> searchAnuncios(@RequestParam String query) {
-    Pageable pageable = PageRequest.of(0, 20);
-    return anuncioRepository.searchAnuncios(query, pageable);
-
-}
+    public Page<Anuncio> searchAnuncios(@RequestParam String query, Pageable pageable) {
+        return anuncioRepository.searchAnuncios(query, pageable);
+    }
 
 
 }
