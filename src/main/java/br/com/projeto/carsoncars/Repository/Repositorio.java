@@ -20,6 +20,7 @@ public interface Repositorio extends CrudRepository<User, UUID> {
     List<User> findByNomeContaining(String term);
     List<User> findByNomeStartsWith(String term);
     List<User> findByNomeEndsWith(String term);
+    User findByNome(String nome);
 
 
 }

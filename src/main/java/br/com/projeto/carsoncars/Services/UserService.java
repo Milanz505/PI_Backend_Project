@@ -95,11 +95,14 @@ public class UserService {
             } else {
                 if (!isValidNome(userUpdateDTO.getNome())) {
                     throw new IllegalArgumentException("O nome é inválido.");
+                } else {
+                    // Verifica se já existe um usuário com o mesmo nome
+                    User existingUser = action.findByNome(userUpdateDTO.getNome());
+                    if (existingUser != null && !existingUser.getId().equals(user.getId())) {
+                        throw new IllegalArgumentException("O nome já está em uso.");
+                    }
+                    user.setNome(userUpdateDTO.getNome());
                 }
-                else if (action.findByNomeContaining(userUpdateDTO.getNome()) != null) {
-                    throw new IllegalArgumentException("O nome já está em uso.");
-                }
-                user.setNome(userUpdateDTO.getNome());
             }
         }
     
