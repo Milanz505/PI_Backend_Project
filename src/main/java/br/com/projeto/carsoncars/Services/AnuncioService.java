@@ -173,13 +173,40 @@ public Page<Anuncio> filtroAnuncios(Map<String, String> requestBody, Pageable pa
     String marca = requestBody.get("marca");
     String modelo = requestBody.get("modelo");
     String ano = requestBody.get("ano");
-    String precoMax = requestBody.get("precoMax");
-    String precoMin = requestBody.get("precoMin");
+    String precoMinStr = requestBody.get("precoMin");
+    String precoMaxStr = requestBody.get("precoMax");
     String query = requestBody.get("query");
+    String anoMin = requestBody.get("anoMin");
+    String anoMax = requestBody.get("anoMax");
 
+    
+    marca = (marca != null) ? marca.trim() : "";
+    modelo = (modelo != null) ? modelo.trim() : "";
+    ano = (ano != null) ? ano.trim() : "";
+    float precoMin = (precoMinStr != null) ? Float.parseFloat(precoMinStr) : 0;
+    float precoMax = (precoMaxStr != null) ? Float.parseFloat(precoMaxStr) : Float.MAX_VALUE;
+    query = (query != null) ? query.trim() : "";
+    anoMin = (anoMin != null) ? anoMin.trim() : "";
+    anoMax = (anoMax != null) ? anoMax.trim() : "";
 
+    if(precoMin < 0 || precoMin > precoMax) {
+        precoMin = 0;
+    }
 
-    return action.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, pageable);
+    if (precoMin < 0 || precoMin > precoMax) {
+        precoMin = 0;
+    }
+
+    if (anoMin.isEmpty() || anoMax.isEmpty()) {
+        anoMin = "0";
+        anoMax = "9999";
+    }
+    if (marca.isEmpty() && modelo.isEmpty() && ano.isEmpty() && query.isEmpty() && precoMin == 0 && precoMax == Float.MAX_VALUE && anoMin.equals("0") && anoMax.equals("9999")) {
+        return action.findAll(pageable);
+    }
+    
+    return action.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, anoMin, anoMax, pageable);
+
 }
 
 }
