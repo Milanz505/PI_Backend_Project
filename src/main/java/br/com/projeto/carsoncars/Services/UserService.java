@@ -39,6 +39,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder; // Injeta o encoder de senha
 
     public ResponseEntity<?> cadastrar(User obj){
+        
+        User existingUser = action.findByNome(obj.getNome());
 
         if(obj.getNome().isEmpty()){
             message.setMessage("O nome precisa ser preenchido !!!");
@@ -53,7 +55,7 @@ public class UserService {
             message.setMessage("O endereço de email já está em uso !!!");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);   
         }
-        else if (action.findByNomeContaining(obj.getNome()) != null) {
+        else if (existingUser != null && !existingUser.getId().equals(obj.getId())) {
             message.setMessage("O nome já está em uso !!!");
             return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);   
         }

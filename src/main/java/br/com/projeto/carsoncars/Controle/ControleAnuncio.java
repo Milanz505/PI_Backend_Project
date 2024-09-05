@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+import org.springframework.data.domain.Pageable;
 import org.apache.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import br.com.projeto.carsoncars.Services.AnuncioService;
 import br.com.projeto.carsoncars.Entities.Anuncio.Anuncio;
@@ -162,37 +161,7 @@ public class ControleAnuncio {
 
     @GetMapping("/anuncio/filtro")
     public Page<Anuncio> filtroAnuncios(@RequestBody Map<String, String> requestBody, Pageable pageable) {
-
-        if(requestBody.isEmpty()){
-            return anuncioRepository.findAll(pageable);
-        }
-        if(requestBody.get("precoMin").isEmpty()){
-            requestBody.put("precoMin", "0");
-        }
-        if(requestBody.get("precoMax").isEmpty()){
-            requestBody.put("precoMax", "999999999");
-        }
-        if(requestBody.get("ano").isEmpty()){
-            requestBody.put("ano", "0");
-        }
-        if(requestBody.get("marca").isEmpty()){
-            requestBody.put("marca", "");
-        }
-        if(requestBody.get("modelo").isEmpty()){
-            requestBody.put("modelo", "");
-        }
-        if(requestBody.get("query").isEmpty()){
-            requestBody.put("query", "");
-        }
-        
-
-        String marca = requestBody.get("marca");
-        String modelo = requestBody.get("modelo");
-        String ano = requestBody.get("ano");
-        String precoMin = requestBody.get("precoMin");
-        String precoMax = requestBody.get("precoMax");
-        String query = requestBody.get("query");
-        return anuncioRepository.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, pageable);
+        return anuncioService.filtroAnuncios(requestBody, pageable);
     }
 
 }

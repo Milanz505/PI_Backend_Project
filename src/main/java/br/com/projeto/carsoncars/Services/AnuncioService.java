@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -166,5 +168,18 @@ public ResponseEntity<?> getLikes(UUID anuncioId) {
     return new ResponseEntity<>(anuncio.getLikedByUsers(), HttpStatus.OK);
 }
 
+
+public Page<Anuncio> filtroAnuncios(Map<String, String> requestBody, Pageable pageable) {
+    String marca = requestBody.get("marca");
+    String modelo = requestBody.get("modelo");
+    String ano = requestBody.get("ano");
+    String precoMax = requestBody.get("precoMax");
+    String precoMin = requestBody.get("precoMin");
+    String query = requestBody.get("query");
+
+
+
+    return action.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, pageable);
+}
 
 }
