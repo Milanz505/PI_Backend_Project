@@ -152,7 +152,7 @@ public ResponseEntity<?> getComentarios(UUID anuncioId) {
     Anuncio anuncio = anuncioOpt.get();
     Map<String, Object> response = new HashMap<>();
     response.put("comentarios", anuncio.getComentarios());
-    response.put("usuarios", anuncio.getUser()); // Assuming getUsuarios() method exists
+    response.put("usuarios", anuncio.getUser()); 
 
     return new ResponseEntity<>(response, HttpStatus.OK);
 }
@@ -178,7 +178,7 @@ public Page<Anuncio> filtroAnuncios(Map<String, String> requestBody, Pageable pa
     String query = requestBody.get("query");
     String anoMin = requestBody.get("anoMin");
     String anoMax = requestBody.get("anoMax");
-
+    UUID user_id = requestBody.get("user_id") != null ? UUID.fromString(requestBody.get("user_id")) : null;
     
     marca = (marca != null) ? marca.trim() : "";
     modelo = (modelo != null) ? modelo.trim() : "";
@@ -188,6 +188,7 @@ public Page<Anuncio> filtroAnuncios(Map<String, String> requestBody, Pageable pa
     query = (query != null) ? query.trim() : "";
     anoMin = (anoMin != null) ? anoMin.trim() : "";
     anoMax = (anoMax != null) ? anoMax.trim() : "";
+    user_id = (user_id != null) ? user_id : null;
 
     if(precoMin < 0 || precoMin > precoMax) {
         precoMin = 0;
@@ -205,7 +206,14 @@ public Page<Anuncio> filtroAnuncios(Map<String, String> requestBody, Pageable pa
         return action.findAll(pageable);
     }
     
-    return action.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, anoMin, anoMax, pageable);
+    // Verificação do usuário autenticado
+    if (user_id != null) {
+        // Se o usuário estiver logado, excluímos os anúncios desse usuário dos resultados
+        return action.filtroAnunciosExcluindoUsuario(marca, modelo, ano, precoMin, precoMax, query, anoMin, anoMax, user_id, pageable);
+    } else {
+        // Se o usuário não estiver logado, retornamos todos os anúncios
+        return action.filtroAnuncios(marca, modelo, ano, precoMin, precoMax, query, anoMin, anoMax, pageable);
+    }
 
 }
 
