@@ -160,8 +160,8 @@ public class ControleAnuncio {
     }
 
     @GetMapping("/anuncio/filtro")
-    public Page<Anuncio> filtroAnuncios(@RequestBody Map<String, String> requestBody, Pageable pageable) {
-        return anuncioService.filtroAnuncios(requestBody, pageable);
+    public Page<Anuncio> filtroAnuncios(@RequestParam Map<String, String> requestParam, Pageable pageable) {
+        return anuncioService.filtroAnuncios(requestParam, pageable);
     }
 
 }
